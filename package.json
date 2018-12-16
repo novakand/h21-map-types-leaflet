@@ -1,8 +1,7 @@
-
-{
-  "name": "@types/h21-map-leaflet",
-  "version": "1.0.2",
-  "description": "A library of leaflet Map JS API",
+  "name": "@h21-map/types-leaflet",
+  "version": "1.0.4",
+  "scope":"@h21-map",
+  "description": "A library of Leaflet Map JS API",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,6 +17,5 @@
     "angular"
   ],
   "author": "",
-  "license": "",
-  "homepage": ""
+  "license": ""
 }
