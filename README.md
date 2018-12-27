@@ -1,8 +1,8 @@
-## @h21-map/types-leaflet
+## @h21-map-types/leaflet-map
 
 ## Installation
 ```bash
-npm i @h21-map/types-leaflet
+npm i @h21-map-types/leaflet-map
 ```
 ### Details
 ```bash
