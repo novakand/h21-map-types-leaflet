@@ -7,90 +7,8 @@
 // TypeScript Version: 2.3
 
 
-
-export as namespace GeoJSON;
-
 type NativeMouseEvent = MouseEvent;
 type NativeKeyboardEvent = KeyboardEvent;
-
-export type GeoJsonGeometryTypes = "Point" | "LineString" | "MultiPoint" | "Polygon" | "MultiLineString" |
-    "MultiPolygon" | "GeometryCollection";
-
-export type GeoJsonTypes = "FeatureCollection" | "Feature" | GeoJsonGeometryTypes;
-export type BBox = [number, number, number, number] | [number, number, number, number, number, number];
-export type Position = number[];
-export interface GeoJsonObject {
-    type: GeoJsonTypes;
-    bbox?: BBox;
-}
-
-export type GeoJSON = Geometry | Feature | FeatureCollection;
-
-export interface GeometryObject extends GeoJsonObject {
-    type: GeoJsonGeometryTypes;
-}
-
-export type Geometry = Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon | GeometryCollection;
-
-export interface Point extends GeometryObject {
-    type: "Point";
-    coordinates: Position;
-}
-
-export interface MultiPoint extends GeometryObject {
-    type: "MultiPoint";
-    coordinates: Position[];
-}
-
-export interface LineString extends GeometryObject {
-    type: "LineString";
-    coordinates: Position[];
-}
-
-export interface MultiLineString extends GeometryObject {
-    type: "MultiLineString";
-    coordinates: Position[][];
-}
-
-export interface Polygon extends GeometryObject {
-    type: "Polygon";
-    coordinates: Position[][];
-}
-export interface MultiPolygon extends GeometryObject {
-    type: "MultiPolygon";
-    coordinates: Position[][][];
-}
-
-export interface GeometryCollection extends GeometryObject {
-    type: "GeometryCollection";
-    geometries: Geometry[];
-}
-
-export type GeoJsonProperties = { [name: string]: any; } | null;
-
-export interface Feature<G extends GeometryObject | null = Geometry, P = GeoJsonProperties> extends GeoJsonObject {
-    type: "Feature";
-    geometry: G;
-    id?: string | number;
-    properties: P;
-}
-
-export interface FeatureCollection<G extends GeometryObject | null = Geometry, P = GeoJsonProperties> extends GeoJsonObject {
-    type: "FeatureCollection";
-    features: Array<Feature<G, P>>;
-}
-
-import GeoJSONFeature = GeoJSON.Feature;
-import GeoJSONLineString = GeoJSON.LineString;
-import GeoJSONMultiLineString = GeoJSON.MultiLineString;
-import GeoJSONPolygon = GeoJSON.Polygon;
-import GeoJSONMultiPolygon = GeoJSON.MultiPolygon;
-import GeoJSONFeatureCollection = GeoJSON.FeatureCollection;
-import GeoJSONGeometryObject = GeoJSON.GeometryObject;
-import GeoJSONGeometryCollection = GeoJSON.GeometryCollection;
-import GeoJSONPoint = GeoJSON.Point;
-import GeoJSONMultiPoint = GeoJSON.MultiPoint;
-import GeoJSONGeoJsonObject = GeoJSON.GeoJsonObject;
 
 declare namespace L {
 
@@ -101,6 +19,85 @@ declare namespace L {
 
         static addInitHook(initHookFn: () => void): any & typeof Class;
         static addInitHook(methodName: string, ...args: any[]): any & typeof Class;
+    }
+
+    export namespace GeoJSON {
+
+        export type GeoJsonGeometryTypes = "Point" | "LineString" | "MultiPoint" | "Polygon" | "MultiLineString" |
+            "MultiPolygon" | "GeometryCollection";
+
+        export type GeoJsonTypes = "FeatureCollection" | "Feature" | GeoJsonGeometryTypes;
+
+        export type BBox = [number, number, number, number] | [number, number, number, number, number, number];
+
+        export type Position = number[];
+
+        export interface GeoJsonObject {
+
+            type: GeoJsonTypes;
+            bbox?: BBox;
+        }
+
+        export type GeoJSON = Geometry | Feature | FeatureCollection;
+
+        export interface GeometryObject extends GeoJsonObject {
+            type: GeoJsonGeometryTypes;
+        }
+
+        export type Geometry = Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon | GeometryCollection;
+
+        export interface Point extends GeometryObject {
+            type: "Point";
+            coordinates: Position;
+        }
+
+        export interface MultiPoint extends GeometryObject {
+            type: "MultiPoint";
+            coordinates: Position[];
+        }
+
+
+        export interface LineString extends GeometryObject {
+            type: "LineString";
+            coordinates: Position[];
+        }
+
+
+        export interface MultiLineString extends GeometryObject {
+            type: "MultiLineString";
+            coordinates: Position[][];
+        }
+
+        export interface Polygon extends GeometryObject {
+            type: "Polygon";
+            coordinates: Position[][];
+        }
+
+
+        export interface MultiPolygon extends GeometryObject {
+            type: "MultiPolygon";
+            coordinates: Position[][][];
+        }
+
+        export interface GeometryCollection extends GeometryObject {
+            type: "GeometryCollection";
+            geometries: Geometry[];
+        }
+
+        export type GeoJsonProperties = { [name: string]: any; } | null;
+
+        export interface Feature<G extends GeometryObject | null = Geometry, P = GeoJsonProperties> extends GeoJsonObject {
+            type: "Feature";
+            geometry: G;
+            id?: string | number;
+            properties: P;
+        }
+
+        export interface FeatureCollection<G extends GeometryObject | null = Geometry, P = GeoJsonProperties> extends GeoJsonObject {
+            type: "FeatureCollection";
+            features: Array<Feature<G, P>>;
+        }
+
     }
 
     export class Transformation {
@@ -586,6 +583,7 @@ declare namespace L {
     }
 
     export class CircleMarker<P = any> extends Path {
+
         constructor(latlng: LatLngExpression, options?: CircleMarkerOptions);
         toGeoJSON(): GeoJSON.Feature<GeoJSON.Point, P>;
         setLatLng(latLng: LatLngExpression): this;
@@ -633,6 +631,7 @@ declare namespace L {
     export function canvas(options?: RendererOptions): Canvas;
 
     export class LayerGroup<P = any> extends Layer {
+
         constructor(layers?: Layer[], options?: LayerOptions);
         toGeoJSON(): GeoJSON.FeatureCollection<GeoJSON.GeometryObject, P> | GeoJSON.Feature<GeoJSON.MultiPoint, P> | GeoJSON.GeometryCollection;
         addLayer(layer: Layer): this;
@@ -1229,6 +1228,7 @@ declare namespace L {
     }
 
     export namespace Util {
+
         function extend<D extends object, S1 extends object = {}>(dest: D, src?: S1): D & S1;
         function extend<D extends object, S1 extends object, S2 extends object>(dest: D, src1: S1, src2: S2): D & S1 & S2;
         function extend<D extends object, S1 extends object, S2 extends object, S3 extends object>(dest: D, src1: S1, src2: S2, src3: S3): D & S1 & S2 & S3;
