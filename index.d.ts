@@ -7,6 +7,9 @@
 // TypeScript Version: 2.3
 
 
+
+export as namespace GeoJSON;
+
 type NativeMouseEvent = MouseEvent;
 type NativeKeyboardEvent = KeyboardEvent;
 
@@ -680,7 +683,6 @@ declare namespace L {
         static latLngToCoords(latlng: LatLng): [number, number] | [number, number, number];
         static latLngsToCoords(latlngs: any[], levelsDeep?: number, closed?: boolean): any[];  // Using any[] to avoid artificially limiting valid calls
         static asFeature<P = any>(geojson: GeoJSON.Feature<GeoJSON.GeometryObject, P> | GeoJSON.GeometryObject): GeoJSON.Feature<GeoJSON.GeometryObject, P>;
-
         constructor(geojson?: GeoJSON.GeoJsonObject, options?: GeoJSONOptions<P>)
 
         addData(data: GeoJSON.GeoJsonObject): Layer;
@@ -692,9 +694,7 @@ declare namespace L {
 
 
     export function geoJSON<P = any>(geojson?: GeoJSON.GeoJsonObject, options?: GeoJSONOptions<P>): GeoJSON<P>;
-
     export type Zoom = boolean | 'center';
-
     export interface MapOptions {
         preferCanvas?: boolean;
         attributionControl?: boolean;
@@ -815,11 +815,8 @@ declare namespace L {
 
     export namespace control {
         function zoom(options?: Control.ZoomOptions): Control.Zoom;
-
         function attribution(options?: Control.AttributionOptions): Control.Attribution;
-
         function layers(baseLayers?: Control.LayersObject, overlays?: Control.LayersObject, options?: Control.LayersOptions): Control.Layers;
-
         function scale(options?: Control.ScaleOptions): Control.Scale;
     }
 
@@ -858,7 +855,6 @@ declare namespace L {
         bringToFront(): this;
         bringToBack(): this;
         openOn(map: Map): this;
-
         options: PopupOptions;
     }
 
@@ -888,7 +884,6 @@ declare namespace L {
         isOpen(): boolean;
         bringToFront(): this;
         bringToBack(): this;
-
         options: TooltipOptions;
     }
 
@@ -1013,35 +1008,20 @@ declare namespace L {
 
     export namespace DomEvent {
         type EventHandlerFn = (event: Event) => void;
-
         function on(el: HTMLElement, types: string, fn: EventHandlerFn, context?: any): typeof DomEvent;
-
         function on(el: HTMLElement, eventMap: { [eventName: string]: EventHandlerFn }, context?: any): typeof DomEvent;
-
         function off(el: HTMLElement, types: string, fn: EventHandlerFn, context?: any): typeof DomEvent;
-
         function off(el: HTMLElement, eventMap: { [eventName: string]: EventHandlerFn }, context?: any): typeof DomEvent;
-
         function stopPropagation(ev: Event): typeof DomEvent;
-
         function disableScrollPropagation(el: HTMLElement): typeof DomEvent;
-
         function disableClickPropagation(el: HTMLElement): typeof DomEvent;
-
         function preventDefault(ev: Event): typeof DomEvent;
-
         function stop(ev: Event): typeof DomEvent;
-
         function getMousePosition(ev: MouseEvent, container?: HTMLElement): Point;
-
         function getWheelDelta(ev: Event): number;
-
         function addListener(el: HTMLElement, types: string, fn: EventHandlerFn, context?: any): typeof DomEvent;
-
         function addListener(el: HTMLElement, eventMap: { [eventName: string]: EventHandlerFn }, context?: any): typeof DomEvent;
-
         function removeListener(el: HTMLElement, types: string, fn: EventHandlerFn, context?: any): typeof DomEvent;
-
         function removeListener(el: HTMLElement, eventMap: { [eventName: string]: EventHandlerFn }, context?: any): typeof DomEvent;
     }
 
@@ -1253,7 +1233,6 @@ declare namespace L {
         function extend<D extends object, S1 extends object, S2 extends object>(dest: D, src1: S1, src2: S2): D & S1 & S2;
         function extend<D extends object, S1 extends object, S2 extends object, S3 extends object>(dest: D, src1: S1, src2: S2, src3: S3): D & S1 & S2 & S3;
         function extend(dest: any, ...src: any[]): any;
-
         function create(proto: object | null, properties?: PropertyDescriptorMap): any;
         function bind(fn: () => void, ...obj: any[]): () => void;
         function stamp(obj: any): number;
@@ -1270,9 +1249,89 @@ declare namespace L {
         function indexOf(array: any[], el: any): number;
         function requestAnimFrame(fn: (timestamp: number) => void, context?: any, immediate?: boolean): number;
         function cancelAnimFrame(id: number): void;
-
         let lastId: number;
         let emptyImageUrl: string;
 
     }
+
+
+    // Type definitions for Leaflet.Editable 0.7
+
+    interface EditableStatic {
+        new (map: Map, options: EditOptions): Editable;
+    }
+
+    interface EditOptions {
+        polylineClass?: object;
+        polygonClass?: object;
+        markerClass?: object;
+        drawingCSSClass?: string;
+        editLayer?: LayerGroup<ILayer>;
+        featuresLayer?: LayerGroup<Polyline|Polygon|Marker>;
+        vertexMarkerClass?: object;
+        middleMarkerClass?: object;
+        polylineEditorClass?: object;
+        polygonEditorClass?: object;
+        markerEditorClass?: object;
+        lineGuideOptions?: object;
+        skipMiddleMarkers?: boolean;
+    }
+
+    interface Editable extends Mixin.LeafletMixinEvents {
+        options: EditOptions;
+        currentPolygon: Polyline|Polygon|Marker;
+        startPolyline(latLng?: LatLng, options?: PolylineOptions): Polyline;
+        startPolygon(latLng?: LatLng, options?: PolylineOptions): Polygon;
+        startMarker(latLng?: LatLng, options?: MarkerOptions): Marker;
+        stopDrawing(): void;
+        commitDrawing(): void;
+    }
+
+    let Editable: EditableStatic;
+    interface EditableMixin {
+        enableEdit(): any;
+        disableEdit(): void;
+        toggleEdit(): void;
+        editEnabled(): boolean;
+    }
+
+    interface Map {
+        editable: boolean;
+        editOptions: EditOptions;
+        editTools: Editable;
+    }
+
+    interface Polyline extends EditableMixin {}
+
+    namespace Map {
+        interface MapOptions {
+            editable?: boolean;
+            editOptions?: EditOptions;
+        }
+    }
+    interface BaseEditor {
+        enable(): MarkerEditor|PolylineEditor|PolygonEditor;
+        disable(): MarkerEditor|PolylineEditor|PolygonEditor;
+    }
+
+    interface PathEditor extends BaseEditor {
+        reset(): void;
+    }
+
+    interface PolylineEditor extends PathEditor {
+        continueForward(): void;
+        continueBackward(): void;
+    }
+
+    interface PolygonEditor extends PathEditor {
+        newHole(latlng: LatLng): void;
+    }
+
+    interface MarkerEditor extends BaseEditor {}
+
+    interface Marker extends EditableMixin, MarkerEditor {}
+
+    interface Polyline extends EditableMixin, PolylineEditor {}
+
+    interface Polygon extends EditableMixin, PolygonEditor {}
 }
