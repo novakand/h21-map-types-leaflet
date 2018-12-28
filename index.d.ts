@@ -1181,6 +1181,69 @@ declare namespace L {
         riseOffset?: number;
     }
 
+    export interface IEventPowered<T> {
+        addEventListener(type: string, fn: (e: LeafletEvent) => void, context?: any): T;
+        addOneTimeEventListener(type: string, fn: (e: LeafletEvent) => void, context?: any): T;
+        addEventListener(eventMap: any, context?: any): T;
+        removeEventListener(type: string, fn?: (e: LeafletEvent) => void, context?: any): T;
+        removeEventListener(eventMap?: any, context?: any): T;
+        hasEventListeners(type: string): boolean;
+        fireEvent(type: string, data?: any): T;
+        clearAllEventListeners(): T;
+        on(type: string, fn: (e: LeafletEvent) => void, context?: any): T;
+        on(eventMap: any, context?: any): T;
+        once(type: string, fn: (e: LeafletEvent) => void, context?: any): T;
+        off(type: string, fn?: (e: LeafletEvent) => void, context?: any): T;
+        off(eventMap?: any, context?: any): T;
+        fire(type: string, data?: any): T;
+    }
+
+    export interface IHandler {
+        enable(): void;
+        disable(): void;
+        enabled(): boolean;
+    }
+
+    export interface ILayer {
+        onAdd(map: Map): void;
+        onRemove(map: Map): void;
+    }
+
+    export interface LayersOptions {
+        position?: string;
+        collapsed?: boolean;
+        autoZIndex?: boolean;
+
+    }
+
+    export class Layers extends L.Control implements IEventPowered<Layers> {
+        constructor(baseLayers?: any, overlays?: any, options?: LayersOptions);
+        addBaseLayer(layer: ILayer, name: string): Layers;
+        addOverlay(layer: ILayer, name: string): Layers;
+        removeLayer(layer: ILayer): Layers;
+        addEventListener(type: string, fn: (e: LeafletEvent) => void, context?: any): Layers;
+        addOneTimeEventListener(type: string, fn: (e: LeafletEvent) => void, context?: any): Layers;
+        removeEventListener(type: string, fn?: (e: LeafletEvent) => void, context?: any): Layers;
+        hasEventListeners(type: string): boolean;
+        fireEvent(type: string, data?: any): Layers;
+        on(type: string, fn: (e: LeafletEvent) => void, context?: any): Layers;
+        once(type: string, fn: (e: LeafletEvent) => void, context?: any): Layers;
+        off(type: string, fn?: (e: LeafletEvent) => void, context?: any): Layers;
+        fire(type: string, data?: any): Layers;
+        addEventListener(eventMap: any, context?: any): Layers;
+        removeEventListener(eventMap?: any, context?: any): Layers;
+        clearAllEventListeners(): Layers;
+        on(eventMap: any, context?: any): Layers;
+        off(eventMap?: any, context?: any): Layers;
+    }
+
+    export module Mixin {
+
+        export interface LeafletMixinEvents extends IEventPowered<LeafletMixinEvents> { }
+
+        export var Events: LeafletMixinEvents;
+    }
+
     export class Marker<P = any> extends Layer {
         constructor(latlng: LatLngExpression, options?: MarkerOptions);
         toGeoJSON(): GeoJSON.Feature<GeoJSON.Point, P>;
